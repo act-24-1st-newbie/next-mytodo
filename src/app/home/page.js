@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 
 import TaskCreateForm from "./TaskCreateForm";
 import TaskList from "./TaskList";
-import { SubmitButton } from "@/components/ui/SubmitButton";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function Home() {
   const name = await getUserName();

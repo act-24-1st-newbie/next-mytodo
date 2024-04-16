@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { useFormStatus } from "react-dom";
 
 import { Input as UIInput } from "@/components/ui/input";
-import { SubmitButton } from "@/components/ui/SubmitButton";
+import { SubmitButton } from "@/components/SubmitButton";
 import { SendHorizonal } from "lucide-react";
 
 function Input({ disabled: ignore, ...props }) {
@@ -33,7 +33,7 @@ export default function TaskCreateForm({ action }) {
     <form action={doAction} ref={formRef}>
       <div className="flex gap-4 mt-4">
         <Input type="text" placeholder="Input your task" name="task" />
-        <SubmitButton>
+        <SubmitButton size="icon">
           <SendHorizonal className="h-4 w-4" />
         </SubmitButton>
       </div>

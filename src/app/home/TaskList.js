@@ -22,12 +22,12 @@ async function fetchData() {
  */
 function TaskItem({ task, onDelete }) {
   return (
-    <li className="h-[60px] border-[1px] border-gray-400 dark:border-white rounded-sm flex items-center gap-2 px-4">
+    <li className="h-[60px] border-[1px] border-gray-400 dark:border-white rounded-sm flex items-center gap-4 px-4">
       <input type="checkbox" value={task.is_done} />
       <span className="grow">{task.contents}</span>
       <span>{format(task.created_date, "MM/dd HH:mm")}</span>
       <form action={onDelete.bind(null, task.id)}>
-        <Button variant="destructive">
+        <Button variant="destructive" size="icon">
           <Trash2 className="h-4 w-4" />
         </Button>
       </form>

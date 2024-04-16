@@ -13,13 +13,15 @@ export default function Home() {
 
     // Todo: Supabase signin
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: name,
       password: "111111",
     });
 
     if (!error) {
       redirect("/home");
+    } else {
+      console.error(error);
     }
   }
 
