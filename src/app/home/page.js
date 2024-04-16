@@ -8,6 +8,13 @@ import { SubmitButton } from "@/components/SubmitButton";
 import TaskCreateForm from "./TaskCreateForm";
 import TaskList from "./TaskList";
 import { revalidatePath } from "next/cache";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 /**
  * Sign Out
@@ -120,19 +127,27 @@ export default async function Home() {
     <>
       <Navbar>
         <form action={signout}>
-          <Button type="submit" variant="ghost">
+          <Button type="submit" variant="outline" size="sm">
             Sign Out
           </Button>
         </form>
       </Navbar>
-      <main className="py-4">
+      <main className="py-8">
         <div className="container">
           <p className="text-2xl">Good afternoon, {name}!</p>
           <TaskCreateForm action={create} />
         </div>
         <div>
           <div className="container flex justify-between items-center mt-4">
-            <div>Oldest</div>
+            <Select defaultValue="Oldest">
+              <SelectTrigger className="w-[120px]">
+                <SelectValue></SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Oldest">Oldest</SelectItem>
+                <SelectItem value="Latest">Latest</SelectItem>
+              </SelectContent>
+            </Select>
             <form action={deleteAll}>
               <SubmitButton variant="outline">Clear All</SubmitButton>
             </form>
