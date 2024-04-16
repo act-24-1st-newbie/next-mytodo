@@ -1,7 +1,16 @@
 "use client";
 import React, { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useFormStatus } from "react-dom";
+
+import { Input as UIInput } from "@/components/ui/input";
+import { SubmitButton } from "@/components/ui/SubmitButton";
+import { SendHorizonal } from "lucide-react";
+
+function Input({ disabled: ignore, ...props }) {
+  const { pending } = useFormStatus();
+
+  return <UIInput {...props} disabled={pending} />;
+}
 
 /**
  * @typedef {{
@@ -11,9 +20,10 @@ import { Input } from "@/components/ui/input";
  * @param {TaskFormProps}} param0
  * @returns
  */
-export default function TaskForm({ action }) {
+export default function TaskCreateForm({ action }) {
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef(null);
+
   async function doAction(formData) {
     await action(formData);
     formRef.current?.reset();
@@ -23,7 +33,9 @@ export default function TaskForm({ action }) {
     <form action={doAction} ref={formRef}>
       <div className="flex gap-4 mt-4">
         <Input type="text" placeholder="Input your task" name="task" />
-        <Button type="submit">Submit</Button>
+        <SubmitButton>
+          <SendHorizonal className="h-4 w-4" />
+        </SubmitButton>
       </div>
     </form>
   );
