@@ -4,10 +4,106 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
+import { SubmitButton } from "@/components/SubmitButton";
 import TaskCreateForm from "./TaskCreateForm";
 import TaskList from "./TaskList";
-import { SubmitButton } from "@/components/SubmitButton";
+import { revalidatePath } from "next/cache";
 
+/**
+ * Sign Out
+ */
+async function signout() {
+  "use server";
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+}
+
+/**
+ * Create a Task
+ * @param {FormData} formData
+ */
+async function create(formData) {
+  "use server";
+
+  const task = formData.get("task");
+  if (task) {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const { error } = await supabase.from("tasks").insert({
+      contents: task,
+      is_done: false,
+      user_id: user.id,
+    });
+
+    if (error) {
+      console.error(error);
+    } else {
+      revalidatePath("/home");
+    }
+  }
+}
+
+/**
+ * Delete a task
+ * @param {number} id
+ */
+async function del(id) {
+  "use server";
+  const supabase = createClient();
+  await supabase.auth.getUser();
+  const { error } = await supabase.from("tasks").delete().eq("id", id);
+  if (error) {
+    console.error(error);
+  } else {
+    revalidatePath("/home");
+  }
+}
+
+/**
+ * Delete All Tasks
+ */
+async function deleteAll() {
+  "use server";
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const { error } = await supabase.from("tasks").delete().eq("user_id", user.id);
+  if (error) {
+    console.error(error);
+  } else {
+    revalidatePath("/home");
+  }
+}
+
+/**
+ * Upadate a task about checked status
+ * @param {number} id
+ * @param {FormData} formData
+ */
+async function updateCheck(id, formData) {
+  "use server";
+  const isDone = formData.get("is-done") === "on";
+  const supabase = createClient();
+  await supabase.auth.getUser();
+  const { error } = await supabase
+    .from("tasks")
+    .update({ is_done: isDone, modified_date: new Date() })
+    .eq("id", id);
+  if (error) {
+    console.error(error);
+  } else {
+    revalidatePath("/home");
+  }
+}
+
+/**
+ * Home Page
+ * @constructor
+ */
 export default async function Home() {
   const name = await getUserName();
   if (!name) {
@@ -17,79 +113,7 @@ export default async function Home() {
   async function getUserName() {
     const supabase = createClient();
     const { data } = await supabase.auth.getUser();
-    return data?.user?.email;
-  }
-
-  async function signout() {
-    "use server";
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    redirect("/");
-  }
-
-  /** @param {FormData} formData */
-  async function create(formData) {
-    "use server";
-
-    const task = formData.get("task");
-    if (task) {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const { error } = await supabase.from("tasks").insert({
-        contents: task,
-        is_done: false,
-        user_id: user.id,
-      });
-
-      if (error) {
-        console.error(error);
-      } else {
-        redirect("/home");
-      }
-    }
-  }
-
-  async function del(id) {
-    "use server";
-    const supabase = createClient();
-    const { error } = await supabase.from("tasks").delete().eq("id", id);
-    if (error) {
-      console.error(error);
-      return;
-    }
-    redirect("/home");
-  }
-
-  async function deleteAll() {
-    "use server";
-    const supabase = createClient();
-    const { error } = await supabase.from("tasks").delete().eq("user_id", data.user.id);
-    if (error) {
-      console.error(error);
-      return;
-    }
-    redirect("/home");
-  }
-
-  /**
-   * @param {number} id
-   * @param {FormData} formData
-   */
-  async function updateCheck(id, formData) {
-    "use server";
-    const isDone = formData.get("is-done") === "on";
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("tasks")
-      .update({ is_done: isDone, modified_date: new Date() })
-      .eq("id", id);
-    if (error) {
-      console.error(error);
-      return;
-    }
-    redirect("/home");
+    return data?.user?.email?.split("@")[0];
   }
 
   return (
