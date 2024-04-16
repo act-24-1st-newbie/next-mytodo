@@ -34,12 +34,13 @@ export default async function Home() {
     const task = formData.get("task");
     if (task) {
       const supabase = createClient();
-
-      const { data } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       const { error } = await supabase.from("tasks").insert({
         contents: task,
         is_done: false,
-        user_id: data.user.id,
+        user_id: user.id,
       });
 
       if (error) {
@@ -53,7 +54,6 @@ export default async function Home() {
   async function del(id) {
     "use server";
     const supabase = createClient();
-    await supabase.auth.getUser();
     const { error } = await supabase.from("tasks").delete().eq("id", id);
     if (error) {
       console.error(error);
@@ -65,8 +65,26 @@ export default async function Home() {
   async function deleteAll() {
     "use server";
     const supabase = createClient();
-    const { data } = await supabase.auth.getUser();
     const { error } = await supabase.from("tasks").delete().eq("user_id", data.user.id);
+    if (error) {
+      console.error(error);
+      return;
+    }
+    redirect("/home");
+  }
+
+  /**
+   * @param {number} id
+   * @param {FormData} formData
+   */
+  async function updateCheck(id, formData) {
+    "use server";
+    const isDone = formData.get("is-done") === "on";
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("tasks")
+      .update({ is_done: isDone, modified_date: new Date() })
+      .eq("id", id);
     if (error) {
       console.error(error);
       return;
@@ -96,7 +114,7 @@ export default async function Home() {
             </form>
           </div>
           <div className="container mt-4">
-            <TaskList onDelete={del} />
+            <TaskList onDelete={del} onUpdateCheck={updateCheck} />
           </div>
         </div>
       </main>

@@ -1,7 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
+
+import TaskCheckbox from "./TaskCheckbox";
 
 async function fetchData() {
   const supabase = createClient();
@@ -16,14 +19,19 @@ async function fetchData() {
 }
 
 /**
- *
- * @param {{ task: object, onDelete: (formData: FormData) }} param0
+ * @param {{
+ * task: object,
+ * onDelete: (formData: FormData) => void,
+ * onUpdateCheck: (formData: FormData) => void
+ * }} param0
  * @returns
  */
-function TaskItem({ task, onDelete }) {
+function TaskItem({ task, onDelete, onUpdateCheck }) {
   return (
     <li className="h-[60px] border-[1px] border-gray-400 dark:border-white rounded-sm flex items-center gap-4 px-4">
-      <input type="checkbox" value={task.is_done} />
+      <form action={onUpdateCheck?.bind(null, task.id)}>
+        <TaskCheckbox defaultChecked={task.is_done} />
+      </form>
       <span className="grow">{task.contents}</span>
       <span>{format(task.created_date, "MM/dd HH:mm")}</span>
       <form action={onDelete.bind(null, task.id)}>
@@ -35,12 +43,19 @@ function TaskItem({ task, onDelete }) {
   );
 }
 
-export default async function TaskList({ onDelete }) {
+/**
+ * @param {{
+ * onDelete: (formData: FormData) => void,
+ * onUpdateCheck: (formData: FormData) => void
+ * }} param0
+ * @returns
+ */
+export default async function TaskList({ onDelete, onUpdateCheck }) {
   const data = await fetchData();
   return (
     <ul className="flex flex-col gap-2">
       {data.map((task) => (
-        <TaskItem key={task.id} task={task} onDelete={onDelete} />
+        <TaskItem key={task.id} task={task} onDelete={onDelete} onUpdateCheck={onUpdateCheck} />
       ))}
     </ul>
   );

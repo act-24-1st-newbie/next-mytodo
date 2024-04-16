@@ -1,8 +1,10 @@
+"use client";
+
 import { atom } from "recoil";
 
 const themeState = atom({
   key: "mode",
-  default: localStorage.getItem("mode") ?? "light",
+  default: "light",
   effects: [
     ({ onSet }) => {
       onSet((newMode) => {
