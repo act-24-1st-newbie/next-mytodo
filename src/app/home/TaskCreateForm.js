@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { Input as UIInput } from "@/components/ui/input";
 import { SubmitButton } from "@/components/SubmitButton";
 import { SendHorizonal } from "lucide-react";
+import { createTask } from "@/lib/actions";
 
 function Input({ disabled: ignore, ...props }) {
   const { pending } = useFormStatus();
@@ -20,13 +21,13 @@ function Input({ disabled: ignore, ...props }) {
  * @param {TaskFormProps}} param0
  * @returns
  */
-export default function TaskCreateForm({ action }) {
+export default function TaskCreateForm() {
   /** @type {React.MutableRefObject<HTMLFormElement>} */
   const formRef = useRef(null);
 
   async function doAction(formData) {
     formRef.current?.reset();
-    await action(formData);
+    await createTask(formData);
   }
 
   return (

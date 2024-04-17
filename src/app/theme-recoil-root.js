@@ -14,7 +14,7 @@ function ThemeBody({ children }) {
   if (mode) {
     return <body className={cn(mode, "dark:bg-slate-800")}>{children}</body>;
   }
-  return <></>;
+  return <body></body>;
 }
 
 /** @param {{ children: React.ReactNode }} param0 */

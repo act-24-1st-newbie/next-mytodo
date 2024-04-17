@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { SubmitButton } from "@/components/SubmitButton";
 import {
   Select,
@@ -8,10 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { deleteAll } from "@/lib/actions";
 import TaskList from "./TaskList";
-import { useState } from "react";
 
-export default function TaskWrapper({ tasks, del, deleteAll, updateCheck }) {
+/**
+ * TaskWrapper component
+ * @param {{tasks: any[]}} param0
+ */
+export default function TaskWrapper({ tasks }) {
   const [order, setOrder] = useState("Oldest");
 
   /** @param {{id: number}[]} list  */
@@ -39,7 +44,7 @@ export default function TaskWrapper({ tasks, del, deleteAll, updateCheck }) {
         </form>
       </div>
       <div className="container mt-4">
-        <TaskList tasks={sorted()} onDelete={del} onUpdateCheck={updateCheck} />
+        <TaskList tasks={sorted()} />
       </div>
     </div>
   );

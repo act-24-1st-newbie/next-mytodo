@@ -1,43 +1,20 @@
-import { redirect } from "next/navigation";
-
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { createClient } from "@/lib/supabase/server";
+import { SignInForm } from "./SignInForm";
 
-export default function Home() {
-  /** @param {FormData} formData */
-  async function signin(formData) {
-    "use server";
-    const name = formData.get("name");
-    if (!name) return;
-
-    // Todo: Supabase signin
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email: name,
-      password: "111111",
-    });
-
-    if (!error) {
-      redirect("/home");
-    } else {
-      console.error(error);
-    }
-  }
-
+/**
+ * Login Page
+ */
+export default function SignIn() {
   return (
     <>
       <Navbar />
       <main className="py-4">
         <div className="container">
-          <form action={signin}>
-            <h1 className="text-[3rem] leading-normal font-bold">What is your name?</h1>
-            <div className="flex gap-4">
-              <Input type="text" placeholder="Input your name" name="name" />
-              <Button type="submit">Submit</Button>
-            </div>
-          </form>
+          <SignInForm />
+          <div className="mt-4 text-sm">
+            <Link href="/home">To Home &gt;</Link>
+          </div>
         </div>
       </main>
     </>
