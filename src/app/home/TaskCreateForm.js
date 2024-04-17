@@ -25,8 +25,8 @@ export default function TaskCreateForm({ action }) {
   const formRef = useRef(null);
 
   async function doAction(formData) {
-    await action(formData);
     formRef.current?.reset();
+    await action(formData);
   }
 
   return (

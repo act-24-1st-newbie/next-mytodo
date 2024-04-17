@@ -1,8 +1,9 @@
 "use client";
 
-export default function TaskCheckbox({ defaultChecked }) {
+export default function TaskCheckbox({ defaultChecked, onChange }) {
   /** @param {React.ChangeEvent<HTMLInputElement>} e */
   function handleChange(e) {
+    onChange?.(e);
     e.currentTarget.form?.requestSubmit();
   }
 

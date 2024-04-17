@@ -4,7 +4,7 @@ import { atom } from "recoil";
 
 const themeState = atom({
   key: "mode",
-  default: "light",
+  default: null,
   effects: [
     ({ onSet }) => {
       onSet((newMode) => {

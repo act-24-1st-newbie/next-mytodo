@@ -1,35 +1,5 @@
-import { format } from "date-fns";
-import { Trash2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
-
-import TaskCheckbox from "./TaskCheckbox";
-
-/**
- * @param {{
- * task: object,
- * onDelete: (formData: FormData) => void,
- * onUpdateCheck: (formData: FormData) => void
- * }} param0
- * @returns
- */
-function TaskItem({ task, onDelete, onUpdateCheck }) {
-  return (
-    <li className="h-[60px] border-[1px] border-gray-400 dark:border-white rounded-sm flex items-center gap-4 px-4">
-      <form action={onUpdateCheck?.bind(null, task.id)}>
-        <TaskCheckbox defaultChecked={task.is_done} />
-      </form>
-      <span className="grow">{task.contents}</span>
-      <span>{format(task.created_date, "MM/dd HH:mm")}</span>
-      <form action={onDelete.bind(null, task.id)}>
-        <Button variant="destructive" size="icon">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </form>
-    </li>
-  );
-}
+import TaskItem from "./TaskItem";
 
 /**
  * TaskList Component
