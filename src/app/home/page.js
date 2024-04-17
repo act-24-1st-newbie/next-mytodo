@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import TaskWrapper from "./TaskWrapper";
 
 /**
  * Sign Out
@@ -112,15 +113,26 @@ async function updateCheck(id, formData) {
  * @constructor
  */
 export default async function Home() {
+  const supabase = createClient();
   const name = await getUserName();
   if (!name) {
-    redirect("/");
+    redirect("/", "replace");
   }
 
+  const tasks = await getTasks();
+
   async function getUserName() {
-    const supabase = createClient();
     const { data } = await supabase.auth.getUser();
-    return data?.user?.email?.split("@")[0];
+    return data?.user?.email?.split("@")?.[0];
+  }
+
+  async function getTasks() {
+    const { data, error } = await supabase.from("tasks").select().order("id");
+    if (error) {
+      console.error(error);
+      return [];
+    }
+    return data;
   }
 
   return (
@@ -137,25 +149,7 @@ export default async function Home() {
           <p className="text-2xl">Good afternoon, {name}!</p>
           <TaskCreateForm action={create} />
         </div>
-        <div>
-          <div className="container flex justify-between items-center mt-4">
-            <Select defaultValue="Oldest">
-              <SelectTrigger className="w-[120px]">
-                <SelectValue></SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Oldest">Oldest</SelectItem>
-                <SelectItem value="Latest">Latest</SelectItem>
-              </SelectContent>
-            </Select>
-            <form action={deleteAll}>
-              <SubmitButton variant="outline">Clear All</SubmitButton>
-            </form>
-          </div>
-          <div className="container mt-4">
-            <TaskList onDelete={del} onUpdateCheck={updateCheck} />
-          </div>
-        </div>
+        <TaskWrapper tasks={tasks} del={del} deleteAll={deleteAll} updateCheck={updateCheck} />
       </main>
     </>
   );

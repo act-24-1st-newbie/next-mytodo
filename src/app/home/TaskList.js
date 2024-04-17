@@ -1,4 +1,3 @@
-import { createClient } from "@/lib/supabase/server";
 import TaskItem from "./TaskItem";
 
 /**
@@ -9,28 +8,10 @@ import TaskItem from "./TaskItem";
  * onUpdateCheck: (formData: FormData) => void
  * }} param0
  */
-export default async function TaskList({ onDelete, onUpdateCheck }) {
-  const data = await fetchData();
-
-  async function fetchData() {
-    const supabase = createClient();
-    await supabase.auth.getUser();
-
-    /**
-     * @type {{data: {id: number; contents: string; is_done: boolean}[]}}
-     */
-    const { data, error } = await supabase.from("tasks").select().order("id");
-
-    if (error) {
-      console.error(error);
-      return [];
-    }
-    return data;
-  }
-
+export default function TaskList({ tasks, onDelete, onUpdateCheck }) {
   return (
     <ul className="flex flex-col gap-2">
-      {data.map((task) => (
+      {tasks.map((task) => (
         <TaskItem key={task.id} task={task} onDelete={onDelete} onUpdateCheck={onUpdateCheck} />
       ))}
     </ul>

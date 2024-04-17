@@ -1,8 +1,9 @@
+import { redirect } from "next/navigation";
+
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
 export default function Home() {
   /** @param {FormData} formData */
