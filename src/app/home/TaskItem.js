@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { SubmitButton } from "@/components/SubmitButton";
 
 import TaskCheckbox from "./TaskCheckbox";
 
@@ -32,9 +32,9 @@ export default function TaskItem({ task, onDelete, onUpdateCheck }) {
       <span className={cn("grow", { "line-through text-gray-400": check })}>{task.contents}</span>
       <span>{format(task.created_date, "MM/dd HH:mm")}</span>
       <form action={onDelete.bind(null, task.id)}>
-        <Button variant="destructive" size="icon">
+        <SubmitButton variant="destructive" size="icon">
           <Trash2 className="h-4 w-4" />
-        </Button>
+        </SubmitButton>
       </form>
     </li>
   );

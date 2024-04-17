@@ -1,20 +1,11 @@
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
-import { SubmitButton } from "@/components/SubmitButton";
 import TaskCreateForm from "./TaskCreateForm";
-import TaskList from "./TaskList";
-import { revalidatePath } from "next/cache";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import TaskWrapper from "./TaskWrapper";
 
 /**
@@ -135,6 +126,10 @@ export default async function Home() {
     return data;
   }
 
+  function getTaskCount() {
+    return `${tasks.filter((t) => !t.is_done).length} / ${tasks.length}`;
+  }
+
   return (
     <>
       <Navbar>
@@ -147,6 +142,9 @@ export default async function Home() {
       <main className="py-8">
         <div className="container">
           <p className="text-2xl">Good afternoon, {name}!</p>
+          <p className="text-2xl mt-4">You&apos;ve got</p>
+          <p className="text-[3rem] font-bold">{getTaskCount()}</p>
+          <p className="text-2xl">task(s) today!</p>
           <TaskCreateForm action={create} />
         </div>
         <TaskWrapper tasks={tasks} del={del} deleteAll={deleteAll} updateCheck={updateCheck} />
