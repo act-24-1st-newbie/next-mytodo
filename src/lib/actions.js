@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "./supabase/server";
 import { revalidatePath } from "next/cache";
 
-const supabase = createClient();
-
 /**
  * SignIn
  * @param {{ msg?: string }} prev
@@ -15,6 +13,7 @@ export async function signIn(prev, formData) {
   const name = formData.get("name");
   if (!name) return;
 
+  const supabase = createClient();
   const { error } = await supabase.auth.signInWithPassword({
     email: name,
     password: "111111",
@@ -34,6 +33,7 @@ export async function signIn(prev, formData) {
  * Sign Out
  */
 export async function signout() {
+  const supabase = createClient();
   await supabase.auth.signOut();
   redirect("/");
 }

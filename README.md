@@ -7,7 +7,7 @@ Next로 MyTodo만들기
 * tailwindcss
 * shadcn/ui
 * recoil
-* supabase
+* supabase (https://supabase.com/)
 
 ## 추가 파일
 * .env.local
