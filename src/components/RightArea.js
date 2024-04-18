@@ -14,7 +14,7 @@ export function RightArea({ children }) {
 
   useEffect(() => {
     setMode(localStorage.getItem("mode") ?? "light");
-    setNow(Date.now());
+    // setNow(Date.now());
   }, []);
 
   useEffect(() => {
