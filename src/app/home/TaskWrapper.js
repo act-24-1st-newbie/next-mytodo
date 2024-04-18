@@ -14,17 +14,16 @@ import TaskList from "./TaskList";
 
 /**
  * TaskWrapper component
- * @param {{tasks: any[]}} param0
+ * @param {{tasks: {id: number}[]}} param0
  */
 export default function TaskWrapper({ tasks }) {
   const [order, setOrder] = useState("Oldest");
 
-  /** @param {{id: number}[]} list  */
   function sorted() {
     if (order === "Latest") {
-      return tasks.toSorted((a, b) => b.id - a.id);
+      return [...tasks].sort((a, b) => b.id - a.id);
     }
-    return tasks.toSorted((a, b) => a.id - b.id);
+    return [...tasks].sort((a, b) => a.id - b.id);
   }
 
   return (

@@ -1,6 +1,5 @@
 import { Inter, Noto_Sans_KR } from "next/font/google";
 import { cn } from "@/lib/utils";
-import ThemeRecoilRoot from "./theme-recoil-root";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -14,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={cn("font-sans", inter.variable, notoSansKr.variable)}>
-      <ThemeRecoilRoot>{children}</ThemeRecoilRoot>
+      <body>{children}</body>
     </html>
   );
 }

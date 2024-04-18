@@ -1,11 +1,5 @@
-"use client";
-
-import { format } from "date-fns";
-import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { themeState } from "@/lib/theme";
+import { RightArea } from "./RightArea";
 
 function LeftArea() {
   return (
@@ -13,28 +7,6 @@ function LeftArea() {
       <Link href="/" className="text-2xl font-bold">
         My Todo
       </Link>
-    </div>
-  );
-}
-
-/**
- * @param {{ children: React.ReactNode }} param0
- */
-function RightArea({ children }) {
-  const [mode, setMode] = useRecoilState(themeState);
-  function handleModeClick() {
-    setMode(mode === "light" ? "dark" : "light");
-  }
-  function getNow() {
-    return format(new Date(), "MM/dd(eee)");
-  }
-  return (
-    <div className="flex gap-4 items-center">
-      <Button size="icon" variant="ghost" onClick={handleModeClick}>
-        {mode === "light" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      </Button>
-      <span className="font-bold">{getNow()}</span>
-      <div>{children}</div>
     </div>
   );
 }
