@@ -10,9 +10,11 @@ import { useEffect, useState } from "react";
  */
 export function RightArea({ children }) {
   const [mode, setMode] = useState("light");
+  const [now, setNow] = useState(undefined);
 
   useEffect(() => {
     setMode(localStorage.getItem("mode") ?? "light");
+    setNow(Date.now());
   }, []);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export function RightArea({ children }) {
   }
 
   function getNow() {
-    return format(new Date(), "MM/dd(eee)");
+    return !now ? "..." : format(now, "MM/dd(eee)");
   }
 
   return (
